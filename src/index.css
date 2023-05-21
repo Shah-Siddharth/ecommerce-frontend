@@ -1,0 +1,7 @@
+:root {
+    --background-color-1: #777;
+}
+
+.App-header, .App-footer {
+    background-color: var(--background-color-1);
+}

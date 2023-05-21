@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
   const [items, setItems] = useState([]);
@@ -10,13 +12,21 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <>
+    <Header />
+
+    <section>
+      <nav>
       {
         items.map((item) => {
           return (<div key={item.id}>{item.title}</div>);
         })
       }
-    </div>
+      </nav>
+    </section>
+    
+    <Footer />
+    </>
   )
 }
 
