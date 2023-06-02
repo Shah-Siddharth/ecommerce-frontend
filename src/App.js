@@ -2,32 +2,28 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Category from "./components/Category";
+import fetcher from "./helpers/fetcher";
 
 function App() {
-  const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState({errorMessage: '', data: []});
+  const [products, setProducts] = useState({errorMessage: '', data: []});
 
   useEffect(() => {
-    fetch("http://localhost:3001/categories")
-    .then((response) => response.json())
-    .then((data) => setCategories(data));
+    fetcher('/categories').then((data) => setCategories(data));
   }, []);
 
   const handleCategoryClick = (id) => {
-    fetch('http://localhost:3001/products?categoryId=' + id)
-    .then((response) => response.json())
-    .then((data) => setProducts(data));
+    fetcher(`/products?categoryId=${id}`).then((data) => setProducts(data));
   }
 
-
   const renderCategories = () => {
-    return categories.map((c) => {
+    return categories.data.map((c) => {
       return <Category key={c.id} id={c.id} title={c.title} handleClick={handleCategoryClick}/>
     })
   }
 
   const renderProducts = () => {
-    return products.map((p) => {
+    return products.data.map((p) => {
       return <div className="product" key={p.id}>{p.title}</div>
     })
   }
@@ -37,10 +33,12 @@ function App() {
     <>
     <Header />
     <nav>
-      {categories && renderCategories()}
+      {categories.errorMessage && <div>{categories.errorMessage}</div>}
+      {categories.data && renderCategories()}
     </nav>
     <div>
-      {products && renderProducts()}
+      {products.errorMessage && <div>{products.errorMessage}</div>}
+      {products.data && renderProducts()}
     </div>
     <Footer />
     </>
